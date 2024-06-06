@@ -37,6 +37,32 @@ export const getData = () => {
     };
 };
 
+export const updateModuleSettings = (module_id, settings) => {
+    return async (dispatch, getState) => {
+        var server_id = await getState().data.active_server.id;
+        var serverSettings = { ...getState().data.serverSettings };
+        if (!serverSettings.moduleSettings) {
+            serverSettings.moduleSettings = {};
+        }
+
+        var moduleSettings = { ...serverSettings.moduleSettings };
+        moduleSettings[module_id] = settings;
+        serverSettings.moduleSettings = moduleSettings;
+        dispatch({ type: "UPDATE_SERVER_SETTINGS", payload: serverSettings });
+
+        var response = await server.post("/client/server/" + server_id + "/moduleSettings/" + module_id, {
+            settings
+        });
+
+
+
+
+        if (response?.data) {
+
+        }
+    };
+};
+
 
 export const setServerData = (data) => {
     return async (dispatch, getState) => {

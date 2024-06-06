@@ -1,3 +1,4 @@
+import update from 'immutability-helper';
 var INIT_STATE = {
     loaded: false,
     user: null,
@@ -43,6 +44,11 @@ var dataReducer = (state = INIT_STATE, action) => {
                 ...state,
                 server_data: action.payload
             };
+        case "UPDATE_SERVER_SETTINGS":
+            return update(state, {
+                serverSettings: { $set: action.payload }
+            });
+
         default:
             return state;
     }

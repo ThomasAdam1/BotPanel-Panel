@@ -4,12 +4,19 @@ import Dashboard from '../Dashboard';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import history from '../../utils/history';
 import Button from '../elements/Button';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 export class Home extends Component {
 
     componentDidMount() {
         console.log(this.props);
     }
+
+
+    changePage = (page) => {
+        console.log(page);
+        history.push(`/dashboard/${this.props.match.params.server_id}/${page}`);
+    };
 
     renderModules = () => {
 
@@ -25,9 +32,11 @@ export class Home extends Component {
                     moduleCategories[module.category] = [];
                 }
 
+                var module_id = module.id;
+
                 moduleCategories[module.category].push(
                     <div onClick={() => {
-                        history.push("/dashboard/" + this.props.match.params.server_id + "/module/" + module.id);
+                        this.changePage(`module/${module_id}`);
                     }} className='py-4 hover:cursor-pointer hover:opacity-80 px-6 rounded-lg gap-y-4 flex flex-col text-white bg-menu-color'>
                         <img className='w-20' src={module.img} onError={(error) => {
                             error.target.src = 'https://dashboard.botghost.com/images/icons/moderation.png';
@@ -40,6 +49,8 @@ export class Home extends Component {
                         <Button className="mt-auto" >Enabled</Button>
                         {/* </div> */}
                     </div>
+
+
                 );
             }
         }

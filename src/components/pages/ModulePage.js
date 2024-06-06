@@ -3,6 +3,7 @@ import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { connect } from 'react-redux';
 
+import { updateModuleSettings } from "../../actions";
 
 import Dashboard from "../Dashboard";
 // import CustomEventEditor from '../elements/CustomEventEditor';
@@ -471,7 +472,21 @@ export class CustomModule extends Component {
 
 
 
+    renderCommands = () => {
+        var commands = [];
+        var module_commands = this.state.module.commands;
 
+
+        module_commands.forEach(command => {
+            commands.push(
+                <div className={`bg-menu-color rounded-lg p-6 w-full`}>
+                    <h3 className='text-white font-bold'>/module-command</h3>
+                    <span className='text-sm'>Command Description</span>
+                </div>
+            );
+        });
+        return commands;
+    };
 
     // renderCommands = () => {
     //     var commands = [];
@@ -673,15 +688,111 @@ export class CustomModule extends Component {
 
                     <div className='ml-auto'>
                         {/* <button className='btn btn-primary text-white'>Enable</button> */}
-                        <Button> Enable</Button>
+                        {
+                            this.props.moduleSettings[this.state.module.id] == undefined || this.props.moduleSettings[this.state.module.id].enabled == false ?
+                                <Button className="animate-pulse" onClick={(e) => {
+                                    // If it doesn't exist
+                                    if (this.props.moduleSettings[this.state.module.id] === undefined) {
+                                        var moduleSettings = {};
+                                        this.state.module.sections.forEach(section => {
+
+                                            section.inputs.forEach(input => {
+                                                if (input.type.includes("multi")) {
+
+                                                    moduleSettings[input.id] = {
+                                                        value: input.defaultValue != undefined ? input.defaultValue : [],
+                                                        id: input.id,
+                                                        name: input.name,
+                                                        type: input.type,
+                                                    };
+                                                } else if (input.type == "slot") {
+                                                    moduleSettings[input.id] = {
+                                                        value: input.defaultValue != undefined ? input.defaultValue : [],
+                                                        id: input.id,
+                                                        name: input.name,
+                                                        type: input.type,
+                                                        inputs: input.inputs
+                                                    };
+                                                } else {
+                                                    moduleSettings[input.id] = {
+                                                        value: input.defaultValue != undefined ? input.defaultValue : "",
+                                                        id: input.id,
+                                                        name: input.name,
+                                                        type: input.type,
+                                                    };
+                                                }
+
+                                            });
+
+                                        });
+
+                                        var settings = { ...this.props.moduleSettings };
+
+                                        settings[this.state.module.id] = {
+                                            enabled: true,
+                                            settings: moduleSettings,
+                                            version: this.state.module.version,
+                                            sections: [...this.state.module.sections],
+
+                                        };
+
+                                        this.props.updateModuleSettings(this.state.module.id, settings[this.state.module.id]);
+                                        console.log(moduleSettings, 'MODULE SETTINGS');
+
+                                    } else {
+                                        var settings = { ...this.props.moduleSettings };
+                                        settings[this.state.module.id].enabled = true;
+                                        console.log(settings);
+                                        this.props.updateModuleSettings(this.state.module.id, settings[this.state.module.id]);
+                                    }
+                                }}>Enable</Button> : <Button onClick={(e) => {
+
+                                    var settings = { ...this.props.moduleSettings };
+                                    settings[this.state.module.id].enabled = false;
+                                    console.log(settings);
+
+                                    this.props.updateModuleSettings(this.state.module.id, settings[this.state.module.id]);
+
+
+                                }} className="btn-neutral">Disable</Button>
+                        }
                     </div>
 
                 </header>
 
+                <div className={`${this.props.moduleSettings[this.state.module.id] == undefined || this.props.moduleSettings[this.state.module.id]?.enabled == false ? "opacity-30 pointer-events-none" : ""}`}>
+                    <section>
+                        {this.renderSections()}
+                    </section>
 
-                <section>
-                    {this.renderSections()}
-                </section>
+
+
+                    <section className='gap-y-7 flex flex-col mt-5' >
+                        <div>
+                            <h3 className='text-white text-2xl font-bold'>Commands</h3>
+                        </div>
+
+
+                        <div>
+                            <div className='grid grid-cols-2 gap-y-6 gap-x-6'>
+
+                                {this.renderCommands()}
+                                {/* {this.state.module.commands.map((command, index) => {
+                                return (
+                                    <div className={`bg-menu-color rounded-lg p-6 w-full`}>
+                                        <h3 className='text-white font-bold'>/module-command</h3>
+                                        <span className='text-sm'>Command Description</span>
+                                    </div>
+                                );
+                            }
+                            )} */}
+
+
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
 
 
 
@@ -914,10 +1025,11 @@ export class CustomModule extends Component {
 
 const mapStateToProps = (state) => ({
     modules: state.data.modules,
-    moduleSettings: {}
+    moduleSettings: state.data.serverSettings?.moduleSettings ? state.data.serverSettings.moduleSettings : {},
 });
 
 const mapDispatchToProps = {
+    updateModuleSettings
     // setBotModule,
     // setBotSettings,
     // setBuilderIndex,
