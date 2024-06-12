@@ -18,6 +18,11 @@ export class Home extends Component {
         history.push(`/dashboard/${this.props.match.params.server_id}/${page}`);
     };
 
+
+    renderButton = () => {
+
+    };
+
     renderModules = () => {
 
 

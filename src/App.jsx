@@ -30,17 +30,14 @@ export class App extends Component {
           <Toaster position="top-right" />
           <Helmet>
             <title>{this.props.bot.dash_settings.title}</title>
-            <description>
-              {this.props.bot.dash_settings?.description}
-            </description>
+            <description>{this.props.bot.dash_settings?.description}</description>
+            {/* Favicon */}
+            <link rel="icon" type="image/png" sizes="16x16" href={this.props.bot.img}></link>
           </Helmet>
           <Router history={history}>
             <Switch>
               <Route path="/servers" component={Servers} />
-              <Route
-                path="/dashboard/:server_id/module/:module_id"
-                component={ModulePage}
-              />
+              <Route path="/dashboard/:server_id/module/:module_id" component={ModulePage} />
               <Route path="/dashboard/:server_id" component={Modules} />
               <Route path="/" component={Home} />
             </Switch>

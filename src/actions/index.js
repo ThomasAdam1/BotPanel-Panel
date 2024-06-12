@@ -3,15 +3,15 @@ import server from "../utils/server";
 export const setAuth = () => {
   return async (dispatch, getState) => {
     console.log(process.env.API_SERVER);
-    const response = await server.get("/auth").catch((e) => {});
+    const response = await server.get("/auth").catch((e) => { });
 
     if (response?.data) {
       dispatch({ type: "SET_AUTH", payload: true });
     } else {
       window.location.replace(
         process.env.REACT_APP_API_SERVER +
-          "/auth/botpanel?redirect=" +
-          window.location.href
+        "/auth/botpanel?redirect=" +
+        window.location.href
       );
     }
   };
@@ -19,7 +19,7 @@ export const setAuth = () => {
 
 export const getData = () => {
   return async (dispatch, getState) => {
-    const response = await server.get("/client/data").catch((e) => {});
+    const response = await server.get("/client/data").catch((e) => { });
 
     if (response?.data) {
       if (!response?.data.bot?.color_settings) {
@@ -34,6 +34,21 @@ export const getData = () => {
       dispatch({ type: "SET_AUTH", payload: true });
     }
   };
+};
+
+export const resetModuleSettings = (module_id) => {
+  return async (dispatch, getState) => {
+    var serverSettings = { ...getState().data.serverSettings };
+    if (!serverSettings.moduleSettings) {
+      serverSettings.moduleSettings = {};
+    }
+
+    var moduleSettings = { ...serverSettings.moduleSettings };
+    delete moduleSettings[module_id];
+    serverSettings.moduleSettings = moduleSettings;
+    dispatch({ type: "UPDATE_SERVER_SETTINGS", payload: serverSettings });
+  };
+
 };
 
 export const updateModuleSettings = (module_id, settings) => {
