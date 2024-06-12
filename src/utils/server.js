@@ -13,7 +13,7 @@ const instance = axios.create({
         'Access-Control-Allow-Credentials': true,
         "host_name": window.location.host
     },
-    withCredentials: true,
+    withCredentials: true
 });
 
 
