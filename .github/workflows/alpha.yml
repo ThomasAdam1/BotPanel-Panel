@@ -32,10 +32,10 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install 20.10.0
             nvm alias default 20.10.0
-            cd BotPanel-API
+            cd BotPanel-Panel
             git fetch origin
             git reset --hard
             git checkout alpha
             git merge origin/alpha
-            npm i
-            pm2 restart api
+            npm i --force
+            npm run build
