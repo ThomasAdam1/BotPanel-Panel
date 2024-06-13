@@ -47,7 +47,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "alpha": "git add . && git commit -m 'alpha' && git push origin alpha"
   },
   "eslintConfig": {
     "extends": [

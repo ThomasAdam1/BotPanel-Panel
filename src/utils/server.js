@@ -11,7 +11,7 @@ const instance = axios.create({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Access-Control-Allow-Credentials': true,
-        "host_name": window.location.host
+        "host-name": window.location.host
     },
     withCredentials: true
 });
