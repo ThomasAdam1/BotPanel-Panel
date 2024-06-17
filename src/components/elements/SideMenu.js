@@ -79,6 +79,9 @@ export class SideMenu extends Component {
 
 
                     <ul className='menu mt-5 gap-y-1  opacity-80'>
+                        <li className='menu-title font-semibold mt-3 p-0 font-bold'>General</li>
+                        <li><Link to={`/dashboard/${this.props.server_id}`}>Dashboard</Link></li>
+                        <li><Link to={`/dashboard/${this.props.server_id}/commands`}>Default Commands</Link></li>
                         {this.renderModules()}
                     </ul>
                 </section>

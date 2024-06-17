@@ -9,6 +9,7 @@ import { getData } from "./actions";
 import { Helmet } from "react-helmet";
 import ModulePage from "./components/pages/ModulePage";
 import { Toaster } from "react-hot-toast";
+import CommandList from "./components/pages/CommandList";
 
 const Main = () => <h1>Hello world</h1>;
 export class App extends Component {
@@ -38,7 +39,9 @@ export class App extends Component {
             <Switch>
               <Route path="/servers" component={Servers} />
               <Route path="/dashboard/:server_id/module/:module_id" component={ModulePage} />
+              <Route path="/dashboard/:server_id/commands" component={CommandList} />
               <Route path="/dashboard/:server_id" component={Modules} />
+
               <Route path="/" component={Home} />
             </Switch>
           </Router>

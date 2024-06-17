@@ -73,7 +73,7 @@ export class CustomColorPicker extends Component {
 
                 <div className={`bg-menu-color rounded-lg flex items-center p-6 w-full`}>
                     <div>
-                        <InputTitle settings={this.props.settings} refresh={true} />
+                        <InputTitle settings={this.props.settings} />
                         <div className="section-content-header">
                             {this.renderDescription()}
                         </div>
