@@ -32,13 +32,13 @@ export class Button extends Component {
   render() {
     return (
       <button
+        disabled={this.props.disabled ? true : false}
         style={this.renderColor()}
         onClick={(e) => {
           this.props.onClick(e);
         }}
-        className={`btn  text-white ${
-          this.props.className
-        } ${this.renderClasses()}`}
+        className={`btn  text-white ${this.props.className
+          } ${this.renderClasses()}`}
       >
         {this.props.children}
       </button>

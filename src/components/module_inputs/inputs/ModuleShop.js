@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ShopItem } from '../elements/ShopItem';
-import ModuleShopModal from './ModuleShopModal';
+import Dropzone from 'react-dropzone';
+import server from "../../../utils/server";
+// import { ShopItem } from '../elements/ShopItem';
+// import ModuleShopModal from './ModuleShopModal';
 // import PremiumModal from '../elements/PremiumModal';
 
-import ReactGA from 'react-ga';
 import InputTitle from './InputTitle';
+import ShopItem from '../../elements/ShopItem';
 
 export class ModuleShop extends Component {
 
@@ -23,15 +25,12 @@ export class ModuleShop extends Component {
         var items = [];
         this.props.value.forEach((item, index) => {
             items.push(
-                <ShopItem click={() => {
-                    this.setState({
-                        index: index,
-                        showModal: true
-                    });
-
-                    document.body.style.overflowY = 'hidden';
-
-                }} name={item.name} img={item.img} />
+                <ShopItem saveItem={(item, index) => {
+                    console.log(item, index);
+                    var items = [...this.props.value];
+                    items[index] = item;
+                    this.props.onChange(items);
+                }} item={item} index={index} />
             );
 
         });
@@ -61,11 +60,29 @@ export class ModuleShop extends Component {
         }
     };
 
+
+
+
     render() {
         return (
             <div className={`shop section-content-normal ${this.props.settings.premium && !this.props.premium ? "opacity-75 pointer-events-none" : ""}`}>
                 <InputTitle settings={this.props.settings} />
-                <div className="section-content-header mb-2">
+
+                <div className='bg-menu-color flex gap-4 mt-4 justify-center flex-wrap w-full p-4'>
+                    {this.renderItems()}
+
+                    <div className='w-[200px] cursor-pointer hover:opacity-60 h-[200px] flex flex-col items-center justify-center bg-darkGray rounded-md'>
+
+
+                        <div className='w-full bg-grey text-center h-[20%]'>
+                            <h1 className='text-white font-bold'>New Item</h1>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                {/* <div className="section-content-header mb-2">
                     {this.renderDescription()}
                 </div>
                 {this.state.showModal === true ? <ModuleShopModal items={this.props.value} deleteItem={(index) => {
@@ -111,7 +128,7 @@ export class ModuleShop extends Component {
 
 
 
-                </div>
+                </div> */}
             </div>
         );
     }

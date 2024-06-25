@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Dashboard from '../Dashboard';
 import Toggle from '../elements/Toggle';
 import { updateModuleSettings } from '../../actions';
+import Command from '../elements/Command';
 
 export class CommandList extends Component {
 
@@ -33,31 +34,7 @@ export class CommandList extends Component {
                         var command_id = command.id;
 
                         commandCategories[module_name].push(
-                            <div className={`bg-menu-color ${command.enabled == false ? "opacity-70" : ""} flex items-center rounded-lg p-6 w-full`}>
-                                <div>
-                                    <h3 className="text-white font-bold">/{command.name}</h3>
-                                    <span className="text-sm">{command.description}</span>
-                                </div>
-
-                                <div className='ml-auto'>
-                                    <Toggle value={command.enabled != false ? true : false} onChange={(value) => {
-                                        var server_settings = this.props.serverSettings;
-
-                                        var module = server_settings.moduleSettings[module_id];
-                                        console.log(module, 'MODULE HERE');
-
-                                        var command = module.commands[command_index];
-                                        command.enabled = value;
-                                        this.props.updateModuleSettings(
-                                            module_id,
-                                            module
-                                        );
-
-
-                                    }} size="lg" color="primary" />
-
-                                </div>
-                            </div>
+                            <Command command={command} command_index={command_index} module_id={module_id} />
                         );
                     }
                 });

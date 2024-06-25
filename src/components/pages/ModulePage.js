@@ -24,16 +24,17 @@ import MultiChannelSelect from "../module_inputs/inputs/MultiChannelSelect";
 import MultiWordAdd from "../module_inputs/inputs/MultiWordAdd";
 import CustomColorPicker from "../module_inputs/inputs/CustomColorPicker";
 // import CustomModuleCommand from '../module_inputs/inputs/CustomModuleCommand';
-// import CustomSlots from '../module_inputs/inputs/CustomSlots';
+import CustomSlots from '../module_inputs/inputs/CustomSlots';
 // import PremiumSection from '../elements/PremiumSection';
 // import server from '../../../api/server';
 // import RippleLoader from '../elements/RippleLoader';
 // import history from '../../../history';
 import EmojiSelect from "../module_inputs/inputs/EmojiSelect";
 import Button from "../elements/Button";
-// import ModuleShop from '../module_inputs/inputs/ModuleShop';
+import ModuleShop from '../module_inputs/inputs/ModuleShop';
 import history from "../../utils/history";
 import Toggle from "../elements/Toggle";
+import Command from "../elements/Command";
 
 export class CustomModule extends Component {
     constructor(props) {
@@ -426,134 +427,114 @@ export class CustomModule extends Component {
 
                         case "shop":
                             console.log("SHOP VALUE", value, input, "SHOP VALUE");
-                            return <></>;
-                        // return <ModuleShop onChange={(items) => {
-                        //     var settings = { ...this.props.moduleSettings };
-                        //     settings[this.state.module.id].settings[input.id].value = items;
-                        //     this.props.setBotModule({
-                        //         module: "moduleSettings",
-                        //         module_data: settings,
-                        //     });
-                        // }} value={value} settings={input} />;
-                        // case "slot":
-                        //     return <CustomSlots value={value} settings={input}
-                        //         addSlot={(slot, index) => {
-                        //             // console.log('value', slot, index);
-                        //             var settings = { ...this.props.moduleSettings };
-                        //             if (input.slot_type == "event") {
-                        //                 var slot_event = { ...input.slot_event };
-                        //                 slot_event.slot_id = slot.slot_id;
-                        //                 slot_event.input_id = input.id;
-                        //                 slot_event.name = `${input.individual_slot_name} #${settings[this.state.module.id].settings[input.id].value.length + 1}`;
+                            // return <></>;
+                            return <ModuleShop onChange={(items) => {
+                                var settings = { ...this.props.moduleSettings };
+                                settings[this.state.module.id].settings[input.id].value = items;
+                                this.props.setBotModule({
+                                    module: "moduleSettings",
+                                    module_data: settings,
+                                });
+                            }} value={value} settings={input} />;
+                        case "slot":
+                            return <CustomSlots value={value} settings={input}
+                                addSlot={(slot, index) => {
+                                    // console.log('value', slot, index);
+                                    var settings = { ...this.props.moduleSettings };
+                                    if (input.slot_type == "event") {
+                                        var slot_event = { ...input.slot_event };
+                                        slot_event.slot_id = slot.slot_id;
+                                        slot_event.input_id = input.id;
+                                        slot_event.name = `${input.individual_slot_name} #${settings[this.state.module.id].settings[input.id].value.length + 1}`;
 
-                        //                 if (index == "new") {
-                        //                     settings[this.state.module.id].events.push(slot_event);
+                                        if (index == "new") {
+                                            settings[this.state.module.id].events.push(slot_event);
 
-                        //                     // console.log(slot_event, 'SLOT EVENT');
-                        //                     if ('custom_variables' in slot_event) {
-                        //                         var custom_variables = slot_event.custom_variables;
-                        //                         var existing_variables = { ...this.props.bot.commands.variables };
 
-                        //                         custom_variables.forEach((variable) => {
-                        //                             var variable_settings = existing_variables.variables.find((v) => v.reference == variable.reference);
-                        //                             if (!variable_settings && variable) {
-                        //                                 existing_variables.variables.push(variable);
-                        //                             } else {
-                        //                                 // Find index and update
-                        //                                 var index = existing_variables.variables.findIndex((v) => v.reference == variable.reference);
-                        //                                 existing_variables.variables[index] = variable;
 
-                        //                             }
-                        //                         });
-                        //                         this.props.setBotModule(
-                        //                             {
-                        //                                 module: "variables",
-                        //                                 module_data: existing_variables
-                        //                             }
-                        //                         );
-                        //                     }
+                                            if (slot_event.type == "timedEvent") {
+                                                // console.log("TIMED EVENT INSIDE");
+                                                // var timed_events = { ...this.props.bot.commands.timed_events };
+                                                // var existing_timed_event = timed_events.events.find((e) => e.id == slot_event.timer_id);
+                                                // if (!existing_timed_event && this.state.module.timed_events) {
+                                                //     var timed_event = this.state.module.timed_events.find((e) => e.id == slot_event.timer_id);
+                                                //     if (timed_event) {
+                                                //         timed_events.events.push(timed_event);
+                                                //         this.props.setBotModule(
+                                                //             {
+                                                //                 module: "timed_events",
+                                                //                 module_data: timed_events
+                                                //             }
 
-                        //                     if (slot_event.type == "timedEvent") {
-                        //                         console.log("TIMED EVENT INSIDE");
-                        //                         var timed_events = { ...this.props.bot.commands.timed_events };
-                        //                         var existing_timed_event = timed_events.events.find((e) => e.id == slot_event.timer_id);
-                        //                         if (!existing_timed_event && this.state.module.timed_events) {
-                        //                             var timed_event = this.state.module.timed_events.find((e) => e.id == slot_event.timer_id);
-                        //                             if (timed_event) {
-                        //                                 timed_events.events.push(timed_event);
-                        //                                 this.props.setBotModule(
-                        //                                     {
-                        //                                         module: "timed_events",
-                        //                                         module_data: timed_events
-                        //                                     }
+                                                //         );
+                                                //     }
 
-                        //                                 );
-                        //                             }
+                                                // }
 
-                        //                         }
+                                            }
+                                            settings[this.state.module.id].settings[input.id].value.push({
+                                                settings: slot,
+                                                // event: slot_event,
+                                            });
+                                        } else {
+                                            settings[this.state.module.id].settings[input.id].value[index] = {
+                                                settings: slot,
+                                                // event: slot_event
+                                            };
+                                        }
+                                    } else if (input.slot_type == "value") {
+                                        if (index == "new") {
+                                            settings[this.state.module.id].settings[input.id].value.push({
+                                                settings: slot,
+                                            });
+                                        } else {
+                                            settings[this.state.module.id].settings[input.id].value[index] = {
+                                                settings: slot,
+                                            };
+                                        }
+                                    }
 
-                        //                     }
-                        //                     settings[this.state.module.id].settings[input.id].value.push({
-                        //                         settings: slot,
-                        //                         // event: slot_event,
-                        //                     });
-                        //                 } else {
-                        //                     settings[this.state.module.id].settings[input.id].value[index] = {
-                        //                         settings: slot,
-                        //                         // event: slot_event
-                        //                     };
-                        //                 }
-                        //             } else if (input.slot_type == "value") {
-                        //                 if (index == "new") {
-                        //                     settings[this.state.module.id].settings[input.id].value.push({
-                        //                         settings: slot,
-                        //                     });
-                        //                 } else {
-                        //                     settings[this.state.module.id].settings[input.id].value[index] = {
-                        //                         settings: slot,
-                        //                     };
-                        //                 }
-                        //             }
+                                    // Go through settings and remove .event if it exists
 
-                        //             // Go through settings and remove .event if it exists
+                                    settings[this.state.module.id].settings[input.id].value.forEach((slot, index) => {
+                                        if (slot.event) {
+                                            delete slot.event;
+                                        }
+                                    });
 
-                        //             settings[this.state.module.id].settings[input.id].value.forEach((slot, index) => {
-                        //                 if (slot.event) {
-                        //                     delete slot.event;
-                        //                 }
-                        //             });
+                                    // updateBotModuleSettings(this.state.module.id, settings[this.state.module.id]);
 
-                        //             this.props.setBotModule({
-                        //                 module: "moduleSettings",
-                        //                 module_data: settings,
-                        //             });
+                                    this.props.updateModuleSettings(
+                                        this.state.module.id,
+                                        settings[this.state.module.id]
+                                    );
 
-                        //         }}
+                                }}
 
-                        //         deleteSlot={(index) => {
-                        //             // console.log('value', index);
-                        //             var settings = { ...this.props.moduleSettings };
-                        //             // Find corrosponding event
-                        //             if (input.slot_type == "event") {
-                        //                 var events = settings[this.state.module.id].events;
-                        //                 var event_index = events.findIndex((event) => {
-                        //                     return event.slot_id == settings[this.state.module.id].settings[input.id].value[index].settings?.slot_id;
-                        //                 });
+                                deleteSlot={(index) => {
+                                    // console.log('value', index);
+                                    var settings = { ...this.props.moduleSettings };
+                                    // Find corrosponding event
+                                    if (input.slot_type == "event") {
+                                        // var events = settings[this.state.module.id].events;
+                                        // var event_index = events.findIndex((event) => {
+                                        //     return event.slot_id == settings[this.state.module.id].settings[input.id].value[index].settings?.slot_id;
+                                        // });
 
-                        //                 if (event_index !== -1) {
-                        //                     settings[this.state.module.id].events.splice(event_index, 1);
-                        //                 }
+                                        // if (event_index !== -1) {
+                                        //     settings[this.state.module.id].events.splice(event_index, 1);
+                                        // }
 
-                        //             }
+                                    }
 
-                        //             settings[this.state.module.id].settings[input.id].value.splice(index, 1);
-                        //             this.props.setBotModule({
-                        //                 module: "moduleSettings",
-                        //                 module_data: settings,
-                        //             });
-                        //         }}
+                                    settings[this.state.module.id].settings[input.id].value.splice(index, 1);
+                                    this.props.updateModuleSettings(
+                                        this.state.module.id,
+                                        settings[this.state.module.id]
+                                    );
+                                }}
 
-                        //     />;
+                            />;
                         default:
                             return (
                                 <ShortText
@@ -608,27 +589,28 @@ export class CustomModule extends Component {
 
         module_commands.forEach((command, i) => {
             commands.push(
-                <div className={`bg-menu-color rounded-lg p-6 w-full flex items-center ${command.enabled == false ? "opacity-70" : ""}`}>
-                    <div>
-                        <h3 className="text-white font-bold">/{command.name}</h3>
-                        <span className="text-sm">{command.description}</span>
-                    </div>
+                <Command command={command} command_index={i} module_id={this.state.module.id} />
+                // <div className={`bg-menu-color rounded-lg p-6 w-full flex items-center ${command.enabled == false ? "opacity-70" : ""}`}>
+                //     <div>
+                //         <h3 className="text-white font-bold">/{command.name}</h3>
+                //         <span className="text-sm">{command.description}</span>
+                //     </div>
 
-                    <div className="ml-auto">
+                //     <div className="ml-auto">
 
-                        <Toggle value={command.enabled != false ? true : false} onChange={(value) => {
-                            var settings = { ...this.props.moduleSettings[this.state.module.id] };
+                //         <Toggle value={command.enabled != false ? true : false} onChange={(value) => {
+                //             var settings = { ...this.props.moduleSettings[this.state.module.id] };
 
-                            settings.commands[i].enabled = value;
-                            this.props.updateModuleSettings(
-                                this.state.module.id,
-                                settings
-                            );
+                //             settings.commands[i].enabled = value;
+                //             this.props.updateModuleSettings(
+                //                 this.state.module.id,
+                //                 settings
+                //             );
 
 
-                        }} size="lg" color="primary" />
-                    </div>
-                </div>
+                //         }} size="lg" color="primary" />
+                //     </div>
+                // </div>
             );
         });
         return commands;

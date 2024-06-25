@@ -19,9 +19,6 @@ export class Home extends Component {
     };
 
 
-    renderButton = () => {
-
-    };
 
     renderModules = () => {
 
@@ -29,34 +26,46 @@ export class Home extends Component {
         var moduleCategories = {};
 
 
-        // Return the following 20 times
+
         for (var i = 0; i < this.props.modules.length; i++) {
             var module = this.props.modules[i];
-            if (module) {
+            if (module && this.props.serverSettings && this.props.serverSettings.moduleSettings && this.props.serverSettings.moduleSettings[module.id] && this.props.serverSettings.moduleSettings[module.id].enabled == true) {
                 if (!moduleCategories[module.category]) {
                     moduleCategories[module.category] = [];
                 }
 
-                var module_id = module.id;
+                (function (module_id, changePage, serverSettings) {
+                    var button = null;
+                    var enabled = false;
+                    if (serverSettings.moduleSettings[module_id] && serverSettings.moduleSettings[module_id].enabled == true) {
+                        button = <Button onClick={() => {
+                            changePage(`module/${module_id}`);
+                        }} className=' mt-auto' color="primary">Enabled</Button>;
+                        enabled = true;
+                    } else {
+                        button = <Button onClick={() => {
+                            changePage(`module/${module_id}`);
+                        }} className='btn-neutral mt-auto'>Disabled</Button>;
+                        enabled = false;
+                    }
+                    moduleCategories[module.category].push(
+                        <div onClick={() => {
+                            changePage(`module/${module_id}`);
+                        }} className={`py-4 hover:cursor-pointer hover:opacity-80 px-6 rounded-lg gap-y-4 flex flex-col text-white bg-menu-color ${enabled ? "" : "opacity-50"}`}>
+                            <img className='w-20' src={module.img} onError={(error) => {
+                                error.target.src = 'https://dashboard.botghost.com/images/icons/moderation.png';
+                            }}></img>
+                            <h3 className='font-bold text-xl'>{module.name}</h3>
+                            <p className='text-muted'>{module.description}</p>
 
-                moduleCategories[module.category].push(
-                    <div onClick={() => {
-                        this.changePage(`module/${module_id}`);
-                    }} className='py-4 hover:cursor-pointer hover:opacity-80 px-6 rounded-lg gap-y-4 flex flex-col text-white bg-menu-color'>
-                        <img className='w-20' src={module.img} onError={(error) => {
-                            error.target.src = 'https://dashboard.botghost.com/images/icons/moderation.png';
-                        }}></img>
-                        <h3 className='font-bold text-xl'>{module.name}</h3>
-                        <p className='text-muted'>{module.description}</p>
+                            {/* <button className='btn mt-auto  btn-primary text-white'>Enabled</button> */}
+                            {/* <div className='mt-auto flex w-full'> */}
+                            {button}
 
-                        {/* <button className='btn mt-auto  btn-primary text-white'>Enabled</button> */}
-                        {/* <div className='mt-auto flex w-full'> */}
-                        <Button className="mt-auto" >Enabled</Button>
-                        {/* </div> */}
-                    </div>
-
-
-                );
+                            {/* </div> */}
+                        </div>
+                    );
+                })(module.id, this.changePage, this.props.serverSettings);
             }
         }
 
@@ -87,7 +96,8 @@ export class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    modules: state.data.modules
+    modules: state.data.modules,
+    serverSettings: state.data.serverSettings
 });
 
 const mapDispatchToProps = {};

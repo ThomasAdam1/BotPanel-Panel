@@ -287,14 +287,14 @@ export class SlotItem extends Component {
                     {this.state.error}
                 </span>
 
-                <hr class="slashcommand-hr" />
+                <hr className='opacity-30' />
 
                 <div>
                     {/* Render Slots */}
                     {this.renderInputs('new')}
                 </div>
 
-                <hr class="slashcommand-hr" />
+                <hr className='opacity-30 mb-7' />
                 <div style={{ display: "flex" }}>
                     <div style={{ marginLeft: "auto" }}>
                         {this.props.index != "new" ? (

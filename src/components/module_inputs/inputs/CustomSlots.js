@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ShortText from "../inputs/ShortText";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import ChannelSelect from "./ChannelSelect";
-import ReactGA from "react-ga";
+
 import InputSwitcher from "./InputSwitcher";
 import RoleSelect from "./RoleSelect";
 import MultiRoleSelect from "./MultiRoleSelect";
@@ -14,7 +14,8 @@ import LongText from "./LongText";
 import ModuleSelect from "./ModuleSelect";
 import ModuleToggle from "./ModuleToggle";
 import SlotItem from "./SlotItem";
-import SectionHeader from "../elements/SectionHeader";
+import { ArrowDownIcon, ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
+// import SectionHeader from "../elements/SectionHeader";
 
 export class CustomSlots extends Component {
 	constructor(props) {
@@ -216,13 +217,13 @@ export class CustomSlots extends Component {
 
 	renderSlots = () => {
 		return (
-			<>
+			<div className="gap-y-5 flex flex-col">
 				{this.props.value.map((slot, index) => {
 					return (
 						<div>
-							<div className="announcement">
+							<div className="bg-menu-color p-5 rounded-md">
 								<div
-									className="announcement-header"
+									className="flex items-center cursor-pointer"
 									onClick={(e) => {
 										this.setState({
 											showIndex: this.state.showIndex == index ? null : index
@@ -230,16 +231,24 @@ export class CustomSlots extends Component {
 									}}
 								>
 									<div>
-										<h3 className="mb-0">
+										<h3 className="mb-0 text-white font-bold">
 											{this.renderSlotName(slot)} #{index + 1}
 										</h3>
-										<div className="section-content-header">{this.props.settings.individual_slot_description}</div>
+										<div className="text-sm">{this.props.settings.individual_slot_description}</div>
 									</div>
-									<div style={{ marginLeft: "auto" }}>{this.state.showIndex == index ? <i style={{ fontSize: "20px" }} class="bi bi-caret-up-fill"></i> : <i style={{ fontSize: "20px" }} class="bi bi-caret-down-fill"></i>}</div>
+
+									<div className="ml-auto">
+										{this.state.showIndex !== index ? (
+											<ChevronDownIcon className="h-6 w-6 text-white" />
+										) : (
+											<ChevronUpIcon className="h-6 w-6 text-white" />
+										)}
+									</div>
+									{/* <div style={{ marginLeft: "auto" }}>{this.state.showIndex == index ? <i style={{ fontSize: "20px" }} class="bi bi-caret-up-fill"></i> : <i style={{ fontSize: "20px" }} class="bi bi-caret-down-fill"></i>}</div> */}
 								</div>
 
 								{this.state.showIndex == index ? (
-									<div className="announcement-content section-content-normal">
+									<div className="mt-3">
 										<SlotItem
 											deleteSlot={() => {
 												this.props.deleteSlot(index);
@@ -262,7 +271,7 @@ export class CustomSlots extends Component {
 					//     this.props.addSlot(slot, index);
 					// }} />;
 				})}
-			</>
+			</div>
 		);
 	};
 
@@ -276,9 +285,9 @@ export class CustomSlots extends Component {
 	render() {
 		return (
 			<div>
-				<div className="section-content-normal">
-					<div class="mb-15">
-						<h3 style={{ marginBottom: "0px", fontSize: "26px" }}>{this.props.settings.title}</h3>
+				<div className="py-5 px-5 bg-menu-color">
+					<div class="mb-3">
+						<h3 className="text-white text-2xl font-bold">{this.props.settings.title}</h3>
 						<div className="section-content-header">{this.props.settings.description}</div>
 					</div>
 
@@ -294,7 +303,12 @@ export class CustomSlots extends Component {
 
 				{this.props.value.length > 0 ? (
 					<section>
-						<SectionHeader title={`${this.props.settings.active_title} ${this.props.settings.slot_limit ? `${this.props.value.length}/${this.renderSlotLimit()}` : ""}`} pretitle={this.props.settings.active_pretitle} />
+						<div class="mb-3 mt-3">
+							<h3 className="text-white text-2xl font-bold">{`${this.props.settings.active_title} ${this.props.settings.slot_limit ? `${this.props.value.length}/${this.renderSlotLimit()}` : ""}`}</h3>
+							{/* <div className="section-content-header">{this.props.settings.description}</div> */}
+						</div>
+
+						{/* <SectionHeader title={`${this.props.settings.active_title} ${this.props.settings.slot_limit ? `${this.props.value.length}/${this.renderSlotLimit()}` : ""}`} pretitle={this.props.settings.active_pretitle} /> */}
 						{this.renderSlots()}
 					</section>
 				) : null}

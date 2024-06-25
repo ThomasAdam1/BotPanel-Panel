@@ -22,8 +22,9 @@ export class Toggle extends Component {
     renderColor = () => {
         var style = {};
         if (this.props.color) {
-            if (this.props.color == "primary") {
+            if (this.props.color == "primary" && this.props.value) {
                 style.backgroundColor = this.props.color_settings.primary;
+                style.borderColor = this.props.color_settings.primary;
             }
         }
 
@@ -36,6 +37,7 @@ export class Toggle extends Component {
                 value={this.props.value}
                 onChange={(e) => {
                     this.props.onChange(!this.props.value);
+                    e.stopPropagation();
                 }}
                 style={this.renderColor()}
                 type="checkbox"
