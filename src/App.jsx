@@ -12,9 +12,31 @@ import { Toaster } from "react-hot-toast";
 import CommandList from "./components/pages/CommandList";
 
 const Main = () => <h1>Hello world</h1>;
+function hideError(e) {
+  if (
+    e.message ===
+    "ResizeObserver loop completed with undelivered notifications."
+  ) {
+    const resizeObserverErrDiv = document.getElementById(
+      "webpack-dev-server-client-overlay-div"
+    );
+    const resizeObserverErr = document.getElementById(
+      "webpack-dev-server-client-overlay"
+    );
+    if (resizeObserverErr) {
+      resizeObserverErr.setAttribute("style", "display: none");
+    }
+    if (resizeObserverErrDiv) {
+      resizeObserverErrDiv.setAttribute("style", "display: none");
+    }
+  }
+}
 export class App extends Component {
   componentDidMount() {
     this.props.getData();
+    window.addEventListener("error", (e) => {
+      hideError(e);
+    });
   }
   render() {
     if (!this.props.loaded) {
@@ -31,15 +53,28 @@ export class App extends Component {
           <Toaster position="top-right" />
           <Helmet>
             <title>{this.props.bot.dash_settings.title}</title>
-            <description>{this.props.bot.dash_settings?.description}</description>
+            <description>
+              {this.props.bot.dash_settings?.description}
+            </description>
             {/* Favicon */}
-            <link rel="icon" type="image/png" sizes="16x16" href={this.props.bot.img}></link>
+            <link
+              rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href={this.props.bot.img}
+            ></link>
           </Helmet>
           <Router history={history}>
             <Switch>
               <Route path="/servers" component={Servers} />
-              <Route path="/dashboard/:server_id/module/:module_id" component={ModulePage} />
-              <Route path="/dashboard/:server_id/commands" component={CommandList} />
+              <Route
+                path="/dashboard/:server_id/module/:module_id"
+                component={ModulePage}
+              />
+              <Route
+                path="/dashboard/:server_id/commands"
+                component={CommandList}
+              />
               <Route path="/dashboard/:server_id" component={Modules} />
 
               <Route path="/" component={Home} />

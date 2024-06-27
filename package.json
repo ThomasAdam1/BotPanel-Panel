@@ -41,13 +41,14 @@
     "@types/react": "^18.2.60",
     "@types/react-dom": "^18.2.19",
     "daisyui": "^4.11.1",
+    "react-app-rewired": "^2.2.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "alpha": "git add . && git commit -m 'alpha' && git push origin alpha"
   },
